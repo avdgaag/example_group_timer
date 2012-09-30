@@ -1,3 +1,5 @@
+require File.expand_path('../../example_group_timer', __FILE__)
+
 module ExampleGroupTimer
   class Formatter < RSpec::Core::Formatters::ProgressFormatter
     attr_reader :groups

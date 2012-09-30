@@ -3,6 +3,7 @@ require 'example_group_timer/version'
 require 'example_group_timer/timed_item'
 require 'example_group_timer/timed_group'
 require 'example_group_timer/root_timed_group'
+require 'example_group_timer/formatter'
 
 module ExampleGroupTimer
 end
