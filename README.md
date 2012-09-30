@@ -56,7 +56,7 @@ Add these lines to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -64,13 +64,25 @@ Or install it yourself as:
 
 ## Usage
 
-From the command line or in your `.rspec` file, if you have added it to your Gemfile:
+From the command line or in your `.rspec` file, just specify the formatter:
 
-    bundle exec rspec -f ExampleGroupTimer::Formatter
+    rspec -f ExampleGroupTimer::Formatter
 
-If installed manually, you will need to require the gem first:
+Or, create a special Rake task for it:
 
-    rspec -r example_group_timer -f ExampleGroupTimer::Formatter
+    #!/usr/bin/env rake
+    task default: :spec
+
+    require 'rspec/core/rake_task'
+    RSpec::Core::RakeTask.new
+    namespace :spec do
+      RSpec::Core::RakeTask.new(:timed) do |t|
+        t.rspec_opts = '--format ExampleGroupTimer::Formatter'
+      end
+    end
+
+Now you can run your specs as usual with `rake spec`, but with the timing
+behaviour using `rake spec:timed`.
 
 ## Contributing
 
