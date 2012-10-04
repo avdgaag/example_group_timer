@@ -49,6 +49,10 @@ module ExampleGroupTimer
 
     def dump_summary(*args)
       current_group.report
+      template = File.read(File.expand_path('../../../support/template.html', __FILE__))
+      File.open('time_report.html', 'w') do |f|
+        f.write template.sub('PLACEHOLDER', current_group.output.string)
+      end
       super
     end
   end

@@ -24,9 +24,11 @@ module ExampleGroupTimer
     end
 
     def report
-      report_header
-      examples.sort_by { |o| o.duration }.reverse.each(&:report_header)
+      super
+      puts "<ol>"
+      examples.sort_by { |o| o.duration }.reverse.each(&:report)
       subgroups.sort_by { |o| o.duration }.reverse.each(&:report)
+      puts "</ol>"
     end
   end
 end

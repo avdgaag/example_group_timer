@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Charts</title>
+    <style type="text/css">
+      body {
+        font: 12px/18px sans-serif;
+        color: #333;
+        padding: 18px;
+      }
+      ol {
+        padding: 9px;
+        list-style: none;
+        background-color: rgba(0,0,0,.05);
+        font-weight: bold;
+        color: #999;
+        border: 1px solid rgba(0,0,0,.05);
+      }
+      ol ol {
+        margin: 9px;
+      }
+      div.example-group {
+        font-weight: normal;
+        color: #333;
+        overflow: hidden;
+      }
+      div.example-group .duration,
+      div.example-group .share {
+        margin-left: 10px;
+      }
+      div.example-group .title {
+        font-weight: bold;
+        margin-left: 0;
+      }
+      ol.active {
+        background-color: #ffffe1;
+        cursor: pointer;
+      }
+      ol.active ol {
+        background-color: #fff;
+      }
+      #chart {
+        width: 100%;
+        height: 400px;
+      }
+      hr {
+        border: none;
+        height: 1px;
+        background-color: #ccc;
+        margin: 18px 0;
+      }
+
+    </style>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', { packages: ['corechart'] });
+    </script>
+    <script type="text/javascript">
+      var DomEl = (function() {
+        function DomEl(node) {
+          this.node = node;
+          this.type = node.nodeName;
+        }
+
+        DomEl.prototype.nearestParent = function(query) {
+          var nearest_parent = this.node;
+          while(nearest_parent.nodeName.toLowerCase() !== query) {
+            nearest_parent = nearest_parent.parentNode;
+          }
+          return new DomEl(nearest_parent);
+        };
+
+        DomEl.prototype.addClass = function(class_name) {
+          if(this.node.className.indexOf(class_name) === -1) {
+            this.node.className = (this.node.className + ' ' + class_name).replace(/^ *| *$/, '');
+          }
+        };
+
+        DomEl.prototype.removeClass = function(class_name) {
+          if(this.node.className.indexOf(class_name) != -1) {
+            this.node.className = (this.node.className.replace(new RegExp('\\b' + class_name + '\\b', 'g'), '')).replace(/^ *| *$/, '');
+          }
+        };
+
+        DomEl.prototype.active_class = 'active';
+
+        DomEl.prototype.activate = function() {
+          this.addClass(this.active_class);
+        };
+
+        DomEl.prototype.deactivate = function() {
+          this.removeClass(this.active_class);
+        };
+
+        DomEl.prototype.attr = function(query) {
+          return this.node.querySelector(query).innerHTML;
+        };
+
+        return DomEl;
+      })();
+
+      function $(query, el) {
+        if(!el) el = document;
+        return Array.prototype.slice.call(el.querySelectorAll(query)).map(function(node) {
+            return new DomEl(node);
+        });
+      }
+
+      function showChartFromList(e) {
+        var items = $('ol.active > li > div.example-group').map(function(item) {
+          return [item.attr('span.title'), parseFloat(item.attr('span.duration'))];
+        });
+        items.unshift(['Group', 'Time']);
+        var data = google.visualization.arrayToDataTable(items);
+        new google.visualization.PieChart(document.getElementById('chart')).draw(data, { title: 'Time distribution' });
+      }
+
+      function highlightList(e) {
+        $('ol.active').forEach(function(el) { el.deactivate() });
+        new DomEl(e.target).nearestParent('ol').activate();
+      }
+
+      function revertList(e) {
+        new DomEl(e.target).deactivate();
+      }
+
+      window.onload = function() {
+        var lists = document.getElementById('lists');
+        lists.addEventListener('click', showChartFromList, true);
+        lists.addEventListener('mouseover', highlightList, true);
+        lists.addEventListener('mouseout', revertList, true);
+        highlightList({ target: document.querySelector('ol')});
+        showChartFromList();
+      };
+    </script>
+  </head>
+  <body>
+    <div id="chart"></div>
+    <hr>
+    PLACEHOLDER
+  </body>
+</html>

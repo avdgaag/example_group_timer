@@ -8,8 +8,28 @@ module ExampleGroupTimer
       0
     end
 
-    def report_header
-      puts "Total suite: #{duration}"
+    def output
+      @output ||= StringIO.new
+    end
+
+    def report
+      puts '<div id="lists">'
+      puts '<ol>'
+      super
+      puts '</ol>'
+      puts '</div>'
+    end
+
+    def percentage
+      ''
+    end
+
+    def description
+      'Spec suite'
+    end
+
+    def puts(*args)
+      output.puts(*args)
     end
   end
 end

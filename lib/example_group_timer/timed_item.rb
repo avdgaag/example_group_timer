@@ -27,9 +27,25 @@ module ExampleGroupTimer
       ('%.1f%' % [(duration.to_f / parent.duration.to_f) * 100]).rjust(5)
     end
 
-    def report_header
-      truncated = (('  ' * indent) + item.description.strip)[0..59].ljust(60)
-      puts "#{truncated} #{duration} #{percentage}"
+    def report
+      template = <<-EOS
+<li>
+  <div class="example-group">
+    <span class="title">%s</span>
+    <span class="duration">%s</span>
+    <span class="share">%s</span>
+  </div>
+</li>
+EOS
+      puts template % [description, duration, percentage]
+    end
+
+    def description
+      item.description.strip
+    end
+
+    def puts(*args)
+      parent.puts *args
     end
   end
 end
