@@ -16,7 +16,7 @@ module ExampleGroupTimer
     end
 
     def duration
-      '%.5f' % [@finished_at - @started_at]
+      @finished_at - @started_at
     end
 
     def indent
@@ -24,7 +24,7 @@ module ExampleGroupTimer
     end
 
     def percentage
-      ('%.1f%' % [(duration.to_f / parent.duration.to_f) * 100]).rjust(5)
+      (duration.to_f / parent.duration.to_f) * 100
     end
 
     def report
@@ -32,8 +32,8 @@ module ExampleGroupTimer
 <li>
   <div class="example-group">
     <span class="title">%s</span>
-    <span class="duration">%s</span>
-    <span class="share">%s</span>
+    <span class="duration">%.4f</span>
+    <span class="share">%.1f%%</span>
   </div>
 </li>
 EOS

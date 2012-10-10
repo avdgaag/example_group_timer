@@ -21,7 +21,7 @@ module ExampleGroupTimer
     end
 
     def percentage
-      ''
+      100
     end
 
     def description
