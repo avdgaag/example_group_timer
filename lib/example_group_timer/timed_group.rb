@@ -26,8 +26,7 @@ module ExampleGroupTimer
     def report
       super
       puts "<ol>"
-      examples.sort_by { |o| o.duration }.reverse.each(&:report)
-      subgroups.sort_by { |o| o.duration }.reverse.each(&:report)
+      (examples + subgroups).sort_by(&:duration).reverse.each(&:report)
       puts "</ol>"
     end
   end
